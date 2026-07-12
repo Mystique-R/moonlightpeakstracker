@@ -71,7 +71,7 @@ nav button.active{color:var(--n1);background:var(--lav)}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
 .tab{flex:1;min-width:120px;border:1px solid var(--line);background:linear-gradient(180deg,var(--card),var(--card2));border-radius:14px;padding:14px;cursor:pointer;text-align:center;font-family:"Fredoka";font-weight:600;font-size:1.1rem;transition:.18s}
 .tab .em{font-size:1.5rem;display:block;margin-bottom:3px}.tab:hover{border-color:var(--lav)}
-.tab.Spring[aria-selected=true]{border-color:#b6e6c0;color:#b6e6c0;box-shadow:0 0 0 3px rgba(182,230,192,.15)}
+.tab.Spring[aria-selected=true]{border-color:#f4a6c6;color:#f4a6c6;box-shadow:0 0 0 3px rgba(244,166,198,.15)}
 .tab.Summer[aria-selected=true]{border-color:#f4d98f;color:#f4d98f;box-shadow:0 0 0 3px rgba(244,217,143,.15)}
 .tab.Autumn[aria-selected=true]{border-color:#e9b088;color:#e9b088;box-shadow:0 0 0 3px rgba(233,176,136,.15)}
 .tab.Winter[aria-selected=true]{border-color:#a9c8ef;color:#a9c8ef;box-shadow:0 0 0 3px rgba(169,200,239,.15)}
@@ -156,7 +156,6 @@ label.it img{width:30px;height:30px;object-fit:contain;flex:none}
 <body>
 <div class="bg" id="bg" aria-hidden="true"><div class="bat b1"><img id="bi1" alt=""></div><div class="bat b2"><img id="bi2" alt=""></div><div class="bat b3"><img id="bi3" alt=""></div></div>
 
-<button id="syncbtn" aria-label="Sync your data" style="position:fixed;right:16px;bottom:118px;z-index:55;background:linear-gradient(180deg,#3a2568,#2b1c52);border:1px solid rgba(196,178,244,.4);color:var(--lav);border-radius:99px;padding:8px 14px;font:inherit;font-weight:700;font-size:.78rem;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.4)">☁ Sync</button>
 <div class="pop" id="syncpop" style="bottom:148px">
   <button class="close" id="syncclose">×</button>
   <h3>☁ Save your progress</h3>
@@ -183,7 +182,7 @@ label.it img{width:30px;height:30px;object-fit:contain;flex:none}
 </form>
 </div>
 
-<nav><div class="wrap" id="nav"><span class="brandmini" data-page="home">☾ Moonlit Almanac</span></div></nav>
+<nav><div class="wrap" id="nav"><span class="brandmini" data-page="home">☾ Moonlit Almanac</span><button id="syncbtn-top" aria-label="Sync your data" style="margin-left:auto;background:linear-gradient(180deg,#3a2568,#2b1c52);border:1px solid rgba(196,178,244,.4);color:var(--lav);border-radius:99px;padding:7px 13px;font:inherit;font-weight:700;font-size:.78rem;cursor:pointer;white-space:nowrap">☁ Sync</button></div></nav>
 <main class="wrap" id="app"></main>
 <div class="saveflag" id="saveflag">Saved ✓</div>
 
@@ -237,8 +236,10 @@ async function cloudLoad(code){
     }
   }catch(e){msg.style.color='var(--gold)';msg.textContent='Could not reach sync server. Try again in a moment.';}
 }
-if(!syncCode&&syncConfigured()){syncCode=genCode();localStorage.setItem(SYNCKEY,syncCode);cloudSave();}
-document.getElementById('syncbtn').onclick=()=>{updateSyncUI();document.getElementById('syncpop').classList.toggle('show');};
+let _syncIsNew=false;
+if(!syncCode&&syncConfigured()){syncCode=genCode();localStorage.setItem(SYNCKEY,syncCode);cloudSave();_syncIsNew=true;}
+document.getElementById('syncbtn-top').onclick=()=>{updateSyncUI();document.getElementById('syncpop').classList.toggle('show');};
+if(_syncIsNew&&syncConfigured()){setTimeout(()=>{updateSyncUI();const sp=document.getElementById('syncpop');sp.classList.add('show');const note=document.createElement('p');note.style.cssText='background:rgba(196,178,244,.12);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.8rem;margin:0 0 10px';note.textContent="Welcome! We've generated a sync code just for you — copy it now so you can pick up your progress on any device later.";sp.insertBefore(note,sp.querySelector('.tipfield'));},600);}
 document.getElementById('syncclose').onclick=()=>document.getElementById('syncpop').classList.remove('show');
 document.getElementById('synccode-load').onclick=()=>cloudLoad(document.getElementById('synccode-input').value.trim());
 window.addEventListener('load',()=>{if(syncConfigured()&&syncCode)cloudLoad_silent();});
@@ -289,7 +290,7 @@ home.innerHTML=`<div class="phead"><div class="moon"></div><div class="eyebrow">
 <h1>The Moonlit Almanac</h1>
 <p>A cosy little corner of the internet for everything <b>Moonlight Peaks</b> — what to catch and grow each season, gift tastes, birthdays, recipes, spells and every collection worth completing. Made with moonlight by <b>Mystique</b>.</p></div>
 <div class="hcards">
-  <div class="hcard"><h3>✦ Hi, I'm Mystique</h3><p>I fell head-over-heels for this cosy vampire valley and built this almanac to keep all my notes in one enchanted place — and to share them with you. Everything here is pulled from the game and the community wiki, tidied up, and dressed in moonlight. Pick a section above to explore.</p>
+  <div class="hcard"><h3>✦ Hi, I'm Mystique</h3><p>I fell head-over-heels for this cosy supernatural valley and built this almanac to keep all my notes in one enchanted place — and to share them with you. Everything here is pulled from the game and the community wiki, tidied up, and dressed in moonlight. Pick a section above to explore.</p>
   <p style="margin:0;color:var(--lav)">Your progress on every checklist saves right here in your browser. 🌙</p></div>
   <div class="hcard tip"><h3>♥ Tip the creator</h3><p>If this almanac saved you a wander or two, a small tip keeps the lanterns lit. Thank you, truly.</p>
   <div class="bigid"><div><div class="k">Binance Pay ID</div><div class="v">557663134</div></div><button class="copy" data-copy="557663134">Copy</button></div></div>
@@ -351,9 +352,9 @@ function seasonPanel(se){
     ${blk('Year-round critters','🦋',critAll.length,'<div class="igrid">'+critAll.map(c=>icell({n:c.n,sub:c.t})).join('')+'</div>',false)}
   </div>`;
 }
-SEASONS.forEach((se,i)=>{const t=document.createElement('button');t.className='tab '+se;t.setAttribute('role','tab');t.setAttribute('aria-selected',i===0);t.innerHTML=`<span class="em">${EM[se]}</span>${se}`;t.onclick=()=>selSeason(se);tabs.appendChild(t);});
+SEASONS.forEach((se)=>{const t=document.createElement('button');t.className='tab '+se;t.setAttribute('role','tab');t.setAttribute('aria-selected','false');t.innerHTML=`<span class="em">${EM[se]}</span>${se}`;t.onclick=()=>selSeason(se);tabs.appendChild(t);});
 spanels.innerHTML=SEASONS.map(seasonPanel).join('');
-function selSeason(se){[...tabs.children].forEach(t=>t.setAttribute('aria-selected',t.classList.contains(se)));spanels.querySelectorAll('.spanel').forEach(p=>p.classList.toggle('show',p.id==='panel-'+se));}
+function selSeason(se){[...tabs.children].forEach(t=>t.setAttribute('aria-selected', t.classList.contains(se) ? 'true' : 'false'));spanels.querySelectorAll('.spanel').forEach(p=>p.classList.toggle('show',p.id==='panel-'+se));}
 spanels.addEventListener('click',e=>{const h=e.target.closest('.sblock>h4');if(h)h.parentElement.classList.toggle('open');});
 selSeason('Spring');
 
